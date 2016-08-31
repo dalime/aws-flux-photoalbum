@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import AlbumStore from '../stores/AlbumStore';
 import UserActions from '../actions/UserActions';
 
+import FileUploader from './Photo/FileUploader';
 import EditAlbum from './Album/EditAlbum';
 import DeleteAlbum from './Album/DeleteAlbum';
 
@@ -20,8 +21,6 @@ export default class Album extends Component {
     this._onChange = this._onChange.bind(this);
     this._onInputChange = this._onInputChange.bind(this);
     this._addPhoto = this._addPhoto.bind(this);
-    this._editPhoto = this._editPhoto.bind(this);
-    this._deletePhoto = this._deletePhoto.bind(this);
   }
 
   componentDidMount() {
@@ -44,17 +43,8 @@ export default class Album extends Component {
     this.setState({newPhotoURL: e.target.value})
   }
 
-  _addPhoto(e) {
-    e.preventDefault();
-    UserActions.addPhoto(this.props.params.id, this.state.newPhotoURL);
-  }
-
-  _editPhoto(e) {
-
-  }
-
-  _deletePhoto(e) {
-
+  _addPhoto(file) {
+    UserActions.addPhoto(file);
   }
 
   render() {
@@ -72,18 +62,7 @@ export default class Album extends Component {
         return (
           <div>
             <h1>{this.state.name}</h1>
-            <form className="form-group" onSubmit={this._addPhoto}>
-              <h3>Add New Photo</h3>
-              <label>
-                URL:
-                <input
-                  type="text"
-                  className="form-control"
-                  onChange={this._onInputChange}
-                />
-              </label>
-              <button className="btn btn-success">Add</button>
-            </form>
+            <FileUploader addPhoto={this._addPhoto}/>
             <EditAlbum id={this.props.params.id}/>
             <DeleteAlbum id={this.props.params.id}/>
             {Photos}

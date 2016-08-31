@@ -1,19 +1,26 @@
 const express = require('express');
-const router = express.Router();
+const fs = require('fs');
+const multer = require('multer');
+const path = require('path');
 
 const Photo = require('../models/photo');
 
-router.route('/')
-  .get((req, res) => {
-    Photo.find({}, (err, photos) => {
-      res.status(err ? 400 : 200).send(err || photos);
-    });
+const upload = multer({ storage: multer.memoryStorage() });
+
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  Photo.find({}, (err, photos) => {
+    res.status(err ? 400: 200).send(err || photos);
   })
-  .post((req, res) => {
-    Photo.create(req.body, (err, newPhoto) => {
-      res.status(err ? 400 : 200).send(err || newPhoto);
-    });
-  });
+})
+
+router.post('/', upload.single('photo'), (req, res) => {
+  Photo.upload(req.file, (err, photo) => {
+    res.status(err ? 400: 200).send(err || photo);
+  })
+})
 
 router.route('/:id')
   .get((req, res) => {
