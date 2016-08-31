@@ -25,11 +25,21 @@ router.get('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-  Album.findByIdAndRemove(req.params.id, (err, album) => {
-    if (err || !album) {
-      return res.status(400).send(err || 'Album was not deleted.');
-    }
-    res.send(album);
+  // Album.findByIdAndRemove(req.params.id, (err, album) => {
+  //   if (err || !album) {
+  //     return res.status(400).send(err || 'Album was not deleted.');
+  //   }
+  //   res.send(album);
+  // })
+  Album.pre('remove', next => {
+    mongoose.model('Album').findOne({photos: this._id}, (err, album) => {
+      if (err || album) return next();
+
+      album.photos = album.photos.filter(photoId => photoId !== this._id);
+      album.save(err => {
+        next()
+      })
+    })
   })
 })
 

@@ -11,7 +11,7 @@ export default class DeletePhoto extends Component {
   }
 
   _deletePhoto(e) {
-    e.preventDefault()
+    e.preventDefault();
     UserActions.deletePhoto(this.props.id);
     browserHistory.push('/');
   }

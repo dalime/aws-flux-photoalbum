@@ -16,7 +16,6 @@ const photoSchema = new mongoose.Schema({
 });
 
 photoSchema.statics.upload = function(fileObj, cb) {
-  console.log ('fileObj:', fileObj);
   let { originalname, buffer } = fileObj;
 
   let Key = uuid() + path.extname(originalname);
@@ -36,6 +35,30 @@ photoSchema.statics.upload = function(fileObj, cb) {
     this.create({ name: originalname, url }, cb);
   })
 }
+
+photoSchema.pre('remove', function(next) {
+  let id = this._id;
+  let Key = this.s3_key;
+
+  let params = {
+    Bucket: BUCKET_NAME,
+    Key
+  };
+
+  s3.deleteObject(params, (err, result) =>{
+   if (err) return next(err)
+
+    mongoose.model('Album').find({ photos: mongoose.Types.ObjectId(`${id}`) }, (err, albums) =>{
+      let newAlbum = albums[0];
+      console.log ('albums:', albums);
+
+      newAlbum.photos = newAlbum.photos.filter(photo => photo.toString() !== id.toString())
+      newAlbum.save(err =>{
+        next();
+      });
+    })
+  })
+});
 
 const Photo = mongoose.model('Photo', photoSchema);
 

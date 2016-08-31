@@ -17,14 +17,16 @@ const API = {
     data.append('photo', file);
     axios.post('/api/photos', data)
       .then(res => {
-        ServerActions.receivePhoto(res.data)
         this.addPhotoToAlbum(albumId, res.data._id)
       })
       .catch(console.error);
   },
   addPhotoToAlbum(albumId, photoId) {
     axios.put(`/api/albums/${albumId}/addPhoto/${photoId}`)
-      .then(res => ServerActions.receiveAlbum(res.data))
+      .then(res => {
+        console.log ('res.data:', res.data);
+        ServerActions.receiveAlbum(res.data);
+      })
       .catch(console.error);
   },
   getPhoto(id) {
