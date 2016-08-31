@@ -42,7 +42,9 @@ const API = {
   },
   deletePhoto(id) {
     axios.delete(`/api/photos/${id}`)
-      .then(res => ServerActions.receiveDeletePhoto(res.data))
+      .then(res => {
+        ServerActions.receiveDeletePhoto(res.data._id)
+      })
       .catch(console.error);
   },
   addAlbum(name) {

@@ -37,7 +37,6 @@ export default class Album extends Component {
       name: AlbumStore.getName(),
       photos: AlbumStore.getPhotos()
     })
-    console.log ('this.state.photos:', this.state.photos);
   }
 
   _onInputChange(e) {

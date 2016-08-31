@@ -12,7 +12,8 @@ const s3 = new AWS.S3();
 const photoSchema = new mongoose.Schema({
   name: {type: String, required: true},
   url: {type: String, required: true},
-  createdAt: {type: Date, required: true, default: Date.now}
+  createdAt: {type: Date, required: true, default: Date.now},
+  s3_key: { type: String, required: true }
 });
 
 photoSchema.statics.upload = function(fileObj, cb) {
@@ -32,7 +33,7 @@ photoSchema.statics.upload = function(fileObj, cb) {
 
     let url = `${AWS_URL_BASE}/${BUCKET_NAME}/${Key}`;
 
-    this.create({ name: originalname, url }, cb);
+    this.create({ name: originalname, url, s3_key: Key }, cb);
   })
 }
 

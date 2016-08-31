@@ -21,20 +21,20 @@ router.route('/')
     })
   })
 
-router.delete('/:id', (req, res) =>{
-  Photo.findById(req.params.id, (err, photo) =>{
-    if(err) return res.status(400).send(err)
-      photo.remove();
-      res.send(photo);
-    });
-  })
-
 router.route('/:id')
   .get((req, res) => {
     Photo.findById(req.params.id, (err, photo) => {
       res.status(err ? 400 : 200).send(err || photo);
     });
   })
+  .delete((req, res) => {
+    Photo.findById(req.params.id, (err, photo) => {
+      if (err) return res.status(400).send(err);
+      photo.remove();
+      res.send(photo);
+    })
+  })
+
   // .delete((req, res) => {
   //   Photo.findByIdAndRemove(req.params.id, err => {
   //     res.status(err ? 400 : 200).send(err || req.params.id);
