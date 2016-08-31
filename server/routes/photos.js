@@ -9,18 +9,17 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
-
-router.get('/', (req, res) => {
-  Photo.find({}, (err, photos) => {
-    res.status(err ? 400: 200).send(err || photos);
+router.route('/')
+  .get((req, res) => {
+    Photo.find({}, (err, photos) => {
+      res.status(err ? 400 : 200).send(err || photos);
+    })
   })
-})
-
-router.post('/', upload.single('photo'), (req, res) => {
-  Photo.upload(req.file, (err, photo) => {
-    res.status(err ? 400: 200).send(err || photo);
+  .post(upload.single('photo'), (req, res) => {
+    Photo.upload(req.file, (err, photo) => {
+      res.status(err ? 400 : 200).send(err || photo);
+    })
   })
-})
 
 router.route('/:id')
   .get((req, res) => {

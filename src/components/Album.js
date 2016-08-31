@@ -44,7 +44,7 @@ export default class Album extends Component {
   }
 
   _addPhoto(file) {
-    UserActions.addPhoto(file);
+    UserActions.addPhoto(this.props.params.id, file);
   }
 
   render() {

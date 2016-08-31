@@ -5,8 +5,8 @@ const PersonActions = {
   getAlbum(id) {
     API.getAlbum(id);
   },
-  addPhoto(file) {
-    API.addPhoto(file);
+  addPhoto(albumId, file) {
+    API.addPhoto(albumId, file);
   },
   getPhoto(id) {
     API.getPhoto(id);

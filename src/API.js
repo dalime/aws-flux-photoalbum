@@ -12,12 +12,13 @@ const API = {
       .then(res => ServerActions.receiveAlbum(res.data))
       .catch(console.error);
   },
-  addPhoto(file) {
+  addPhoto(albumId, file) {
     let data = new FormData();
     data.append('photo', file);
     axios.post('/api/photos', data)
       .then(res => {
-        console.log ('res:', res);
+        ServerActions.receivePhoto(res.data)
+        this.addPhotoToAlbum(albumId, res.data._id)
       })
       .catch(console.error);
   },

@@ -11,6 +11,10 @@ class AlbumStore extends EventEmitter {
 
     AppDispatcher.register(action => {
       switch(action.type) {
+        case 'RECEIVE_PHOTO':
+          _photos.push(action.photo);
+          this.emit('CHANGE');
+          break;
         case 'RECEIVE_ALBUMS':
           _albums = action.albums;
           this.emit('CHANGE');
